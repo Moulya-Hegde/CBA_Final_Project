@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ConfirmPage from './pages/ConfirmPage'
+import Home from './pages/Home'
+import { useEffect } from 'react'
+import { supabase } from './lib/supabase'
+export default function App() {
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session?.user) {
+          const user = session.user;
 
-function App() {
-  const [count, setCount] = useState(0)
+          // Check if profile exists
+          const { data: profile, error } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
 
+          if (error && error.code === "PGRST116") {
+            // Not found → create profile
+            const username =
+              user.user_metadata?.full_name || user.user_metadata?.username|| user.email.split("@")[0];
+
+            await supabase.from("profiles").insert({
+              id: user.id,
+              email: user.email,
+              username,
+            });
+          }
+        }
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/confirm" element={<ConfirmPage />} />
+        </Routes>
+      </BrowserRouter>
+      
     </>
   )
 }
-
-export default App
