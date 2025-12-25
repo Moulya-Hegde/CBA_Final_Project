@@ -40,36 +40,90 @@ const Rooms = () => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-          <div className="space-y-6">
+        <div className="relative z-10 h-full">
+          <div
+            className="absolute flex flex-col"
+            style={{
+              top: '280px',
+              left: '213px',
+              gap: '14px'
+            }}
+          >
             {/* Welcome Text */}
-            <p className="text-white text-lg md:text-xl font-light tracking-widest raleway">
+            <p
+              className="text-white"
+              style={{
+                fontFamily: 'Montserrat, sans-serif',
+                fontWeight: 400,
+                fontSize: '50px',
+                lineHeight: '1',
+                letterSpacing: '0',
+                margin: 0,
+                padding: 0
+              }}
+            >
               ROOMS AND RATES
             </p>
 
-            {/* Main Heading */}
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display">
+            {/* Main Heading - LUXURY */}
+            <h1
+              className="text-white"
+              style={{
+                fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
+                fontWeight: 700,
+                fontSize: '154px',
+                lineHeight: '1',
+                letterSpacing: '10.78px',
+                margin: 0,
+                padding: 0
+              }}
+            >
               LUXURY
             </h1>
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display -mt-4">
+
+            {/* HOTELS */}
+            <h1
+              className="text-white"
+              style={{
+                fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
+                fontWeight: 700,
+                fontSize: '60px',
+                lineHeight: '1',
+                letterSpacing: '24px',
+                margin: 0,
+                padding: 0
+              }}
+            >
               HOTELS
             </h1>
 
             {/* Subtitle */}
-            <p className="text-white text-base md:text-lg max-w-2xl mx-auto mt-6 font-light raleway">
-              Each of our bright, light-flooded rooms come with everything you could possibly need for a comfortable stay. And yes, comfort isn't our only objective.
+            <p
+              className="text-white"
+              style={{
+                fontFamily: 'Montserrat, sans-serif',
+                fontWeight: 400,
+                fontSize: '25px',
+                lineHeight: '1.2',
+                letterSpacing: '2.5px',
+                width: '575px',
+                margin: 0,
+                padding: 0
+              }}
+            >
+              Each of our bright, light-flooded rooms come with everything you could possibly need for a comfortable stay.
             </p>
+          </div>
 
-            {/* CTA Button */}
-            <div className="mt-8">
-              <Button
-                size="lg"
-                onClick={scrollToNext}
-                className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                <span className="mr-2">🛏️</span> VIEW ROOMS
-              </Button>
-            </div>
+          {/* CTA Button - Centered above Scroll */}
+          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2">
+            <Button
+              size="lg"
+              onClick={scrollToNext}
+              className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+            >
+              <span className="mr-2">🛏️</span> VIEW ROOMS
+            </Button>
           </div>
 
           {/* Scroll Indicator */}
