@@ -6,7 +6,8 @@ import FeaturesSection from '../components/home/FeaturesSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import Footer from '../components/home/Footer';
 import { Button, Typography, Container, Box } from "@mui/material";
-
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 const Home = () => {
   const [user, setUser] = useState(null);
   const [openAuth, setOpenAuth] = useState(false);

@@ -3,15 +3,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 
 // Pages
-import Home from './pages/Home'
 import ConfirmPage from './pages/ConfirmPage'
 import Home from './pages/Home'
 import Facilities from './pages/Facilities'
 import ContactUs from './pages/ContactUs'
 import Rooms from './pages/Rooms'
 import RoomDetail from './pages/RoomDetail'
-import { useEffect } from 'react'
-import { supabase } from './lib/supabase'
+import ChatWindow from './components/ChatWindow'
+import ChatToggleButton from './components/ChatToggleButton'
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
