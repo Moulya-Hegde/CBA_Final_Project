@@ -7,6 +7,8 @@ import {
   Slide,
   Snackbar,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
@@ -14,6 +16,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 
+// Smooth transition for the dialog appearing from the bottom
 const Transition = (props) => <Slide direction="up" {...props} />
 
 export default function AuthDialog({ open, onClose }) {
@@ -24,8 +27,16 @@ export default function AuthDialog({ open, onClose }) {
     severity: "error",
   })
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
+  // Helper to trigger notifications from child components (SignIn/SignUp)
   const showSnack = (message, severity = "error") => {
     setSnack({ open: true, message, severity })
+  }
+
+  const handleCloseSnack = () => {
+    setSnack((prev) => ({ ...prev, open: false }))
   }
 
   return (
@@ -34,39 +45,49 @@ export default function AuthDialog({ open, onClose }) {
         open={open}
         onClose={onClose}
         TransitionComponent={Transition}
+        fullWidth
+        maxWidth="sm"
         PaperProps={{
           sx: {
             borderRadius: 4,
-            width: 880,
-            maxWidth: "92%",
+            width: isMobile ? "95%" : 880,
+            maxWidth: "95%",
             boxShadow: "0px 24px 70px rgba(0,0,0,0.35)",
+            overflow: "hidden" // Ensures image border radius matches paper
           },
         }}
       >
         <DialogContent sx={{ p: 0 }}>
-          <Box display="flex" height="540px">
+          <Box
+            display="flex"
+            flexDirection={isMobile ? "column" : "row"}
+            height={isMobile ? "auto" : 540}
+          >
+            {/* Left Side: Decorative Image */}
             <Box
               sx={{
-                width: "45%",
+                width: isMobile ? "100%" : "45%",
+                height: isMobile ? 200 : "100%",
                 backgroundImage:
                   "url('https://images.unsplash.com/photo-1581859814481-bfd944e3122f')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                borderRadius: "16px 0 0 16px",
               }}
             />
 
+            {/* Right Side: Auth Forms */}
             <Box
               sx={{
-                width: "55%",
-                px: 5,
-                py: 4,
+                width: isMobile ? "100%" : "55%",
+                px: isMobile ? 3 : 5,
+                py: isMobile ? 3 : 4,
                 position: "relative",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
               }}
             >
+              {/* Close Modal Button */}
               <IconButton
                 onClick={onClose}
                 sx={{ position: "absolute", top: 16, right: 16 }}
@@ -74,6 +95,7 @@ export default function AuthDialog({ open, onClose }) {
                 <CloseIcon />
               </IconButton>
 
+              {/* Back to SignIn Button (only visible in SignUp mode) */}
               {mode === "signup" && (
                 <IconButton
                   onClick={() => setMode("signin")}
@@ -83,27 +105,35 @@ export default function AuthDialog({ open, onClose }) {
                 </IconButton>
               )}
 
+              {/* Conditional Rendering of Forms */}
               {mode === "signin" ? (
-                <SignIn setMode={setMode} showSnack={showSnack} />
+                <SignIn 
+                  setMode={setMode} 
+                  showSnack={showSnack} 
+                  onClose={onClose} 
+                />
               ) : (
-                <SignUp setMode={setMode} showSnack={showSnack} />
+                <SignUp 
+                  setMode={setMode} 
+                  showSnack={showSnack} 
+                />
               )}
             </Box>
           </Box>
         </DialogContent>
       </Dialog>
 
-      {/* Snackbar for error/success messages */}
+      {/* Global Snackbar for Auth Feedback */}
       <Snackbar
         open={snack.open}
         autoHideDuration={4000}
-        onClose={() => setSnack({ ...snack, open: false })}
+        onClose={handleCloseSnack}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           severity={snack.severity}
-          sx={{ width: "100%", fontFamily: "raleway" }}
-          onClose={() => setSnack({ ...snack, open: false })}
+          onClose={handleCloseSnack}
+          sx={{ width: "100%", fontFamily: "Raleway, sans-serif" }}
         >
           {snack.message}
         </Alert>

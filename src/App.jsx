@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import ConfirmPage from './pages/ConfirmPage'
-import Home from './pages/Home'
-import { useEffect } from 'react'
 import { supabase } from './lib/supabase'
+
+// Pages
+import Home from './pages/Home'
+import ConfirmPage from './pages/ConfirmPage'
+
+// Chat Components
+import ChatToggleButton from './components/ChatToggleButton'
+import ChatWindow from './components/ChatWindow'
+
 export default function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -19,14 +27,16 @@ export default function App() {
             .single();
 
           if (error && error.code === "PGRST116") {
-            // Not found → create profile
+            // Priority: metadata username > full_name > email prefix
             const username =
-              user.user_metadata?.full_name || user.user_metadata?.username|| user.email.split("@")[0];
+              user.user_metadata?.username || 
+              user.user_metadata?.full_name || 
+              user.email.split("@")[0];
 
             await supabase.from("profiles").insert({
               id: user.id,
               email: user.email,
-              username,
+              username: username,
             });
           }
         }
@@ -37,15 +47,22 @@ export default function App() {
       listener.subscription.unsubscribe();
     };
   }, []);
+
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="min-h-screen bg-white">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/confirm" element={<ConfirmPage />} />
         </Routes>
-      </BrowserRouter>
-      
-    </>
+
+        {/* Global Chatbot UI */}
+        <ChatWindow isOpen={isChatOpen} />
+        <ChatToggleButton 
+          isOpen={isChatOpen} 
+          onClick={() => setIsChatOpen(!isChatOpen)} 
+        />
+      </div>
+    </BrowserRouter>
   )
 }
