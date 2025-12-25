@@ -56,7 +56,7 @@ export default function ChatWindow({ isOpen }) {
 
   return (
     <Box
-      className="fixed bottom-24 right-6 w-80 md:w-96 h-[500px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border border-gray-100"
+      className="fixed bottom-24 right-6 w-80 md:w-96 h-125 bg-white rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border border-gray-100"
     >
       {/* Header */}
       <Box className="bg-blue-600 p-4 text-white">
