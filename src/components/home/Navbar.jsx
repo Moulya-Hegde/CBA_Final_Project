@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
+import { useCart } from '../../contexts/CartContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { getCartCount } = useCart();
+  const cartCount = getCartCount();
 
   const navLinks = [
     { name: 'Home', path: '/', id: 'home' },
@@ -139,6 +144,19 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
+
+          {/* Cart Icon */}
+          <button
+            onClick={() => navigate('/cart')}
+            className="relative text-white hover:text-[#C4A962] transition-all duration-300 hover:scale-110 cursor-pointer"
+          >
+            <ShoppingCart className="w-7 h-7" />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#C4A962] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Bottom border */}

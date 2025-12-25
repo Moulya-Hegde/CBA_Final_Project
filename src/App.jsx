@@ -9,6 +9,8 @@ import Facilities from './pages/Facilities'
 import ContactUs from './pages/ContactUs'
 import Rooms from './pages/Rooms'
 import RoomDetail from './pages/RoomDetail'
+import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 import ChatWindow from './components/ChatWindow'
 import ChatToggleButton from './components/ChatToggleButton'
 export default function App() {
@@ -57,6 +59,8 @@ export default function App() {
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/rooms/:id" element={<RoomDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/confirm" element={<ConfirmPage />} />
         </Routes>
