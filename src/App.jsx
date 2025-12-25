@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { supabase } from './lib/supabase'
+
+// Pages
 import ConfirmPage from './pages/ConfirmPage'
 import Home from './pages/Home'
 import Facilities from './pages/Facilities'
 import ContactUs from './pages/ContactUs'
 import Rooms from './pages/Rooms'
 import RoomDetail from './pages/RoomDetail'
-import { useEffect } from 'react'
-import { supabase } from './lib/supabase'
+import ChatWindow from './components/ChatWindow'
+import ChatToggleButton from './components/ChatToggleButton'
 export default function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -23,14 +28,16 @@ export default function App() {
             .single();
 
           if (error && error.code === "PGRST116") {
-            // Not found → create profile
+            // Priority: metadata username > full_name > email prefix
             const username =
-              user.user_metadata?.full_name || user.user_metadata?.username|| user.email.split("@")[0];
+              user.user_metadata?.username || 
+              user.user_metadata?.full_name || 
+              user.email.split("@")[0];
 
             await supabase.from("profiles").insert({
               id: user.id,
               email: user.email,
-              username,
+              username: username,
             });
           }
         }
@@ -41,9 +48,10 @@ export default function App() {
       listener.subscription.unsubscribe();
     };
   }, []);
+
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="min-h-screen bg-white">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/facilities" element={<Facilities />} />
@@ -52,8 +60,14 @@ export default function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/confirm" element={<ConfirmPage />} />
         </Routes>
-      </BrowserRouter>
-      
-    </>
+
+        {/* Global Chatbot UI */}
+        <ChatWindow isOpen={isChatOpen} />
+        <ChatToggleButton 
+          isOpen={isChatOpen} 
+          onClick={() => setIsChatOpen(!isChatOpen)} 
+        />
+      </div>
+    </BrowserRouter>
   )
 }
