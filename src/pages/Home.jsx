@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
-import AuthDialog from "../components/AuthDialog";
+import Navbar from '../components/home/Navbar';
+import HeroSection from '../components/home/HeroSection';
+import IntroSection from '../components/home/IntroSection';
+import LocationsCarousel from '../components/home/LocationsCarousel';
+import FeaturesSection from '../components/home/FeaturesSection';
+import TestimonialsSection from '../components/home/TestimonialsSection';
+import Footer from '../components/home/Footer';
 import { Button, Typography, Container, Box } from "@mui/material";
 
 const Home = () => {
@@ -29,44 +33,15 @@ const Home = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ textAlign: "center", mt: 10 }}>
-        <Typography variant="h2" sx={{ fontFamily: 'Raleway', fontWeight: 700, mb: 2 }}>
-          LuxeStay Hotel
-        </Typography>
-
-        {user ? (
-          <Box>
-            <Typography variant="h5" sx={{ mb: 4, fontFamily: 'Raleway' }}>
-              Welcome back, {user.user_metadata?.username || user.email.split("@")[0]}!
-            </Typography>
-            <Button 
-              variant="outlined" 
-              color="error" 
-              onClick={handleLogout}
-              sx={{ borderRadius: 2 }}
-            >
-              Logout
-            </Button>
-          </Box>
-        ) : (
-          <Box>
-            <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
-              Experience luxury like never before. Please sign in to book your stay.
-            </Typography>
-            <Button 
-              variant="contained" 
-              size="large"
-              onClick={() => setOpenAuth(true)}
-              sx={{ borderRadius: 3, px: 6, py: 1.5, textTransform: 'none', fontSize: '1.1rem' }}
-            >
-              Get Started
-            </Button>
-            <AuthDialog open={openAuth} onClose={() => setOpenAuth(false)} />
-          </Box>
-        )}
-      </Box>
-    </Container>
+    <div className="min-h-screen">
+      <Navbar />
+      <HeroSection />
+      <IntroSection />
+      <LocationsCarousel />
+      <FeaturesSection />
+      <TestimonialsSection />
+      <Footer />
+    </div>
   );
 };
 
