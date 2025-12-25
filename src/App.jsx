@@ -2,6 +2,10 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ConfirmPage from './pages/ConfirmPage'
 import Home from './pages/Home'
+import Facilities from './pages/Facilities'
+import ContactUs from './pages/ContactUs'
+import Rooms from './pages/Rooms'
+import RoomDetail from './pages/RoomDetail'
 import { useEffect } from 'react'
 import { supabase } from './lib/supabase'
 export default function App() {
@@ -42,6 +46,10 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/facilities" element={<Facilities />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/rooms/:id" element={<RoomDetail />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/confirm" element={<ConfirmPage />} />
         </Routes>
       </BrowserRouter>
