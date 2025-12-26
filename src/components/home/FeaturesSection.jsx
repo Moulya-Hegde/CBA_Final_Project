@@ -1,4 +1,3 @@
-import { Button } from '../ui/button';
 
 const FeaturesSection = () => {
   return (
@@ -14,9 +13,7 @@ const FeaturesSection = () => {
               Our rooms are designed to transport you into an environment made for leisure.
               Take your mind off the day-to-day of home life and find a private paradise for yourself.
             </p>
-            <Button className="bg-[#D4A574] hover:bg-[#C4956F] text-white px-8">
-              EXPLORE
-            </Button>
+            
           </div>
           <div className="md:w-1/2">
             <img
@@ -37,9 +34,7 @@ const FeaturesSection = () => {
               We love life at the beach. Being close to the ocean with access to endless sandy
               beach ensures a relaxed state of mind. It seems like time stands still watching the ocean.
             </p>
-            <Button className="bg-[#D4A574] hover:bg-[#C4956F] text-white px-8">
-              EXPLORE
-            </Button>
+            
           </div>
           <div className="md:w-1/2">
             <img
