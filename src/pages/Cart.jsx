@@ -41,7 +41,7 @@ const Cart = () => {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-44 md:pt-48 pb-20">
           <div className="text-center py-20">
             <ShoppingCart className="w-24 h-24 mx-auto text-gray-300 mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 playfair-display">
@@ -67,13 +67,13 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-44 md:pt-48 pb-12 sm:pb-16 md:pb-20">
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 playfair-display mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 playfair-display mb-2">
             Shopping Cart
           </h1>
-          <p className="text-gray-600 raleway">
+          <p className="text-sm sm:text-base text-gray-600 raleway">
             {cartItems.length} {cartItems.length === 1 ? 'room' : 'rooms'} in your cart
           </p>
         </div>
@@ -85,14 +85,14 @@ const Cart = () => {
             {cartItems.map((item, index) => (
               <div key={item.id}>
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex gap-6">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                       {/* Product Thumbnail */}
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 w-full sm:w-auto">
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-32 h-32 object-cover rounded-md"
+                          className="w-full sm:w-24 md:w-32 h-48 sm:h-24 md:h-32 object-cover rounded-md"
                         />
                       </div>
 
@@ -100,7 +100,7 @@ const Cart = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900 playfair-display">
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 playfair-display">
                               {item.name}
                             </h3>
                             {item.badge && (
@@ -144,23 +144,23 @@ const Cart = () => {
                         </div>
 
                         {/* Price and Quantity */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-bold text-gray-900 playfair-display">
+                            <span className="text-xl sm:text-2xl font-bold text-gray-900 playfair-display">
                               ₹{item.price.toLocaleString('en-IN')}
                             </span>
-                            <span className="text-gray-500 text-sm raleway">per night</span>
+                            <span className="text-gray-500 text-xs sm:text-sm raleway">per night</span>
                           </div>
 
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3 sm:gap-4">
                             {/* Guests Selector */}
                             <div className="flex items-center gap-2">
-                              <Users className="w-4 h-4 text-gray-500" />
+                              <Users className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
                               <Select
                                 value={item.guests?.toString() || '1'}
                                 onValueChange={(value) => updateGuests(item.id, parseInt(value))}
                               >
-                                <SelectTrigger className="w-20 cursor-pointer">
+                                <SelectTrigger className="w-16 sm:w-20 cursor-pointer text-xs sm:text-sm">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -175,12 +175,12 @@ const Cart = () => {
 
                             {/* Nights Selector */}
                             <div className="flex items-center gap-2">
-                              <span className="text-sm text-gray-600 raleway">Nights:</span>
+                              <span className="text-xs sm:text-sm text-gray-600 raleway">Nights:</span>
                               <Select
                                 value={item.quantity.toString()}
                                 onValueChange={(value) => updateQuantity(item.id, parseInt(value))}
                               >
-                                <SelectTrigger className="w-20 cursor-pointer">
+                                <SelectTrigger className="w-16 sm:w-20 cursor-pointer text-xs sm:text-sm">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>

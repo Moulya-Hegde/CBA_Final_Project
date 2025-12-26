@@ -113,28 +113,28 @@ const Checkout = () => {
 
   if (showConfirmation) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center animate-fade-in-up">
-          <div className="mb-6 flex justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="text-center animate-fade-in-up max-w-md">
+          <div className="mb-4 sm:mb-6 flex justify-center">
             <div className="relative">
-              <div className="w-32 h-32 bg-green-100 rounded-full flex items-center justify-center animate-scale-in">
-                <Check className="w-16 h-16 text-green-600 animate-bounce-in" strokeWidth={3} />
+              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-green-100 rounded-full flex items-center justify-center animate-scale-in">
+                <Check className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 animate-bounce-in" strokeWidth={3} />
               </div>
-              <div className="absolute inset-0 w-32 h-32 bg-green-400 rounded-full animate-ping opacity-25"></div>
+              <div className="absolute inset-0 w-24 h-24 sm:w-32 sm:h-32 bg-green-400 rounded-full animate-ping opacity-25"></div>
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 playfair-display">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 playfair-display">
             Order Confirmed!
           </h1>
-          <p className="text-xl text-gray-600 raleway mb-2">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 raleway mb-2">
             Thank you for your booking, {formData.fullName}
           </p>
-          <p className="text-gray-500 raleway">
+          <p className="text-sm sm:text-base text-gray-500 raleway break-words">
             We've sent a confirmation email to {formData.email}
           </p>
-          <div className="mt-8">
-            <div className="inline-flex items-center gap-2 text-[#C4A962] raleway">
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#C4A962] border-t-transparent"></div>
+          <div className="mt-6 sm:mt-8">
+            <div className="inline-flex items-center gap-2 text-[#C4A962] raleway text-sm sm:text-base">
+              <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-2 border-[#C4A962] border-t-transparent"></div>
               <span>Redirecting to home...</span>
             </div>
           </div>
@@ -147,23 +147,23 @@ const Checkout = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-44 md:pt-48 pb-12 sm:pb-16 md:pb-20">
         {/* Back Button */}
         <Button
           variant="ghost"
           onClick={() => navigate('/cart')}
-          className="mb-6 hover:bg-gray-100 raleway cursor-pointer"
+          className="mb-4 sm:mb-6 hover:bg-gray-100 raleway cursor-pointer text-sm sm:text-base"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
           Back to Cart
         </Button>
 
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 playfair-display mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 playfair-display mb-2">
             Checkout
           </h1>
-          <p className="text-gray-600 raleway">
+          <p className="text-sm sm:text-base text-gray-600 raleway">
             Complete your booking details
           </p>
         </div>
