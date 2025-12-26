@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
@@ -6,7 +6,6 @@ import { useCart } from '../../contexts/CartContext';
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
@@ -23,28 +22,15 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
-  // Check if we're on a detail page (like /rooms/2)
+  // Check if we're on a detail page (like /rooms/2) or cart page
   const isDetailPage = () => {
     const detailPagePatterns = [
       /^\/rooms\/\d+$/,  // matches /rooms/1, /rooms/2, etc.
       /^\/facilities\/\d+$/,  // matches /facilities/1, etc.
+      /^\/cart$/,  // matches /cart
     ];
     return detailPagePatterns.some(pattern => pattern.test(location.pathname));
   };
-
-  // Handle scroll event
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
@@ -141,9 +127,7 @@ const Navbar = () => {
       <nav
         className={`absolute z-40 transition-all duration-700 ease-in-out ${
           isDetailPage()
-            ? 'bg-[#3d5f76] shadow-xl'
-            : isScrolled
-            ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-2xl backdrop-blur-lg'
+            ? 'bg-gray-900 shadow-xl'
             : 'bg-transparent'
         }`}
         style={{
@@ -152,7 +136,7 @@ const Navbar = () => {
           left: 0,
           right: 0,
           minHeight: '120px',
-          backdropFilter: isScrolled || isDetailPage() ? 'blur(10px)' : 'none',
+          backdropFilter: isDetailPage() ? 'blur(10px)' : 'none',
         }}
       >
         {/* Desktop Navigation Links - Absolute positioned (lg and up) */}
@@ -161,7 +145,7 @@ const Navbar = () => {
           style={{
             position: 'absolute',
             top: '59px',
-            left: '1011px',
+            left: '950px',
             height: '31px',
             gap: '90px',
             zIndex: 50,
@@ -171,9 +155,9 @@ const Navbar = () => {
             <Link
               key={link.id}
               to={link.path}
-              className={`text-white transition-all duration-300 hover:text-[#C4A962] hover:scale-110 ${
+              className={`text-white transition-all duration-300 hover:text-[#C4A962] ${
                 isActiveLink(link.path)
-                  ? 'border-b-2 border-[#C4A962] pb-1 scale-105'
+                  ? 'border-b-2 border-[#C4A962] pb-1'
                   : 'pb-1'
               }`}
               style={{
@@ -192,7 +176,7 @@ const Navbar = () => {
           {/* Cart Icon - Desktop */}
           <button
             onClick={() => navigate('/cart')}
-            className="relative text-white hover:text-[#C4A962] transition-all duration-300 hover:scale-110 cursor-pointer"
+            className="relative text-white hover:text-[#C4A962] transition-all duration-300 hover:scale-110 cursor-pointer mr-8"
           >
             <ShoppingCart className="w-7 h-7" />
             {cartCount > 0 && (
@@ -209,7 +193,7 @@ const Navbar = () => {
             {/* Cart Icon - Mobile */}
             <button
               onClick={() => navigate('/cart')}
-              className="relative text-white hover:text-[#C4A962] transition-all duration-300 cursor-pointer"
+              className="relative text-white hover:text-[#C4A962] transition-all duration-300 cursor-pointer mr-2"
             >
               <ShoppingCart className="w-6 h-6" />
               {cartCount > 0 && (
@@ -272,7 +256,7 @@ const Navbar = () => {
         {/* Bottom border */}
         <div
           className={`h-0.5 bg-gradient-to-r from-transparent via-[#C4A962] to-transparent transition-opacity duration-700 ${
-            isScrolled || isDetailPage() ? 'opacity-100' : 'opacity-0'
+            isDetailPage() ? 'opacity-100' : 'opacity-0'
           }`}
         />
       </nav>
