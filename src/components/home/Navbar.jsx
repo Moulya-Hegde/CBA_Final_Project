@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext.jsx";
 
 const Navbar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 

@@ -1,15 +1,15 @@
-import Navbar from '../components/home/Navbar';
-import Footer from '../components/home/Footer';
-import ContactInfo from '../components/contact-us/ContactInfo';
-import ContactForm from '../components/contact-us/ContactForm';
-import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import Navbar from "../components/home/Navbar";
+import Footer from "../components/home/Footer";
+import ContactInfo from "../components/contact-us/ContactInfo";
+import ContactForm from "../components/contact-us/ContactForm";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 
 const ContactUs = () => {
   const scrollToNext = () => {
     window.scrollTo({
       top: window.innerHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -31,95 +31,49 @@ const ContactUs = () => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 h-full">
-          <div
-            className="absolute flex flex-col"
-            style={{
-              top: '280px',
-              left: '213px',
-              gap: '14px'
-            }}
-          >
+        <div className="relative z-10 h-full flex items-center justify-center px-6">
+          <div className="flex flex-col items-center text-center max-w-7xl w-full">
             {/* Welcome Text */}
-            <p
-              className="text-white"
-              style={{
-                fontFamily: 'Montserrat, sans-serif',
-                fontWeight: 400,
-                fontSize: '50px',
-                lineHeight: '1',
-                letterSpacing: '0',
-                margin: 0,
-                padding: 0
-              }}
-            >
+            <p className="text-white font-raleway font-light tracking-[0.4em] mb-4 text-sm sm:text-lg md:text-2xl animate-fade-in">
               GET IN TOUCH
             </p>
 
-            {/* Main Heading - CONTACT */}
-            <h1
-              className="text-white"
-              style={{
-                fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
-                fontWeight: 700,
-                fontSize: '154px',
-                lineHeight: '1',
-                letterSpacing: '10.78px',
-                margin: 0,
-                padding: 0
-              }}
-            >
-              CONTACT
-            </h1>
+            {/* Main Heading Group */}
+            <div className="flex flex-col items-center">
+              <h1
+                className="text-white font-serif leading-none tracking-tighter sm:tracking-normal
+                   text-[15vw] sm:text-[100px] md:text-[120px] lg:text-[154px]"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                CONTACT
+              </h1>
 
-            {/* Subheading - US */}
-            <h2
-              className="text-white"
-              style={{
-                fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
-                fontWeight: 700,
-                fontSize: '100px',
-                lineHeight: '1',
-                letterSpacing: '7px',
-                margin: 0,
-                padding: 0
-              }}
-            >
-              US
-            </h2>
-
-            {/* Subtitle */}
-            
+              <h2
+                className="text-white font-serif italic leading-none -mt-2 sm:-mt-4
+                   text-[15vw] sm:text-[80px] md:text-[100px]"
+                style={{ fontFamily: "'EB Garamond', serif" }}
+              >
+                US
+              </h2>
+            </div>
 
             {/* CTA Button */}
-            <div className="pt-6">
-            <button
-              className="
-                group relative px-10 sm:px-12 py-3 sm:py-4
-                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
-                border border-white text-white overflow-hidden
-                transition-all duration-500
-              "
-              onClick={scrollToNext}
-            >
-              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              <span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                Reach Out
-              </span>
-            </button>
-          </div>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-            <button
-              onClick={scrollToNext}
-              className="flex flex-col items-center gap-2 text-white hover:text-[#C4A962] transition-colors duration-300 group"
-              aria-label="Scroll to next section"
-            >
-              <span className="text-sm tracking-widest raleway">Scroll</span>
-              <ChevronDown className="w-6 h-6 animate-bounce" />
-            </button>
+            <div className="pt-10 md:pt-14">
+              <button
+                onClick={scrollToNext}
+                className="
+          group relative px-12 py-4
+          text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
+          border border-white text-white overflow-hidden
+          transition-all duration-500 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]
+        "
+              >
+                <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                <span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                  Reach Out
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -132,7 +86,8 @@ const ContactUs = () => {
               How to Reach Us
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Multiple ways to get in touch with our team. Choose what works best for you.
+              Multiple ways to get in touch with our team. Choose what works
+              best for you.
             </p>
           </div>
           <ContactInfo />
