@@ -57,13 +57,13 @@ const LocationsCarousel = () => {
   const duplicatedLocations = [...locations, ...locations];
 
   return (
-    <div className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 mb-12">
+    <div className="py-12 sm:py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 mb-8 sm:mb-12">
         <div className="text-center">
-          <h2 className="text-4xl md:text-5xl font-serif text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-900 mb-4">
             Our Locations
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-base sm:text-lg">
             Experience luxury across India's most vibrant cities
           </p>
         </div>
@@ -83,36 +83,48 @@ const LocationsCarousel = () => {
               }
 
               .animate-scroll {
-                animation: scroll 10s linear infinite;
+                animation: scroll 30s linear infinite;
               }
 
               .animate-scroll:hover {
                 animation-play-state: paused;
               }
+
+              @media (min-width: 768px) {
+                .animate-scroll {
+                  animation: scroll 20s linear infinite;
+                }
+              }
+
+              @media (min-width: 1024px) {
+                .animate-scroll {
+                  animation: scroll 15s linear infinite;
+                }
+              }
             `}
           </style>
 
           {/* Left fade gradient */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
 
           {/* Right fade gradient */}
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
           <div className="flex animate-scroll">
             {duplicatedLocations.map((location, index) => (
-              <div key={index} className="flex-shrink-0 px-2" style={{ width: '500px' }}>
+              <div key={index} className="flex-shrink-0 px-2 w-64 sm:w-80 md:w-96 lg:w-[500px]">
                 <Card className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
                   <div className="relative">
                     <img
                       src={location.image}
                       alt={location.city}
-                      className="w-full h-44 object-cover"
+                      className="w-full h-36 sm:h-40 md:h-44 object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 text-white">
                       <div className="flex items-center gap-1.5 mb-1">
-                        <MapPin className="w-4 h-4 text-[#D4A574]" />
-                        <h3 className="text-lg font-bold">{location.city}</h3>
+                        <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[#D4A574]" />
+                        <h3 className="text-base sm:text-lg font-bold">{location.city}</h3>
                       </div>
                       <p className="text-xs text-gray-200 mb-0.5">{location.state}</p>
                       <p className="text-xs text-gray-300 italic">{location.description}</p>
