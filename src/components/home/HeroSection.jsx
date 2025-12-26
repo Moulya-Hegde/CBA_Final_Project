@@ -1,127 +1,73 @@
-import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { Link } from "react-router-dom"
 
 const HeroSection = () => {
-  const scrollToNext = () => {
-    window.scrollTo({
-      top: window.innerHeight,
-      behavior: 'smooth',
-    });
-  };
-
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {/* Background Image with Overlay */}
+    <section className="relative min-h-svh w-full overflow-hidden bg-[#0a0b0e]">
+      {/* Background with Slow Zoom Effect */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-slow-zoom"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop')",
+            "url('https://images.unsplash.com/photo-1561501900-3701fa6a0864?q=80&w=1470&auto=format&fit=crop')",
         }}
       >
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-[#0a0b0e]" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 h-full">
-        <div
-          className="absolute flex flex-col"
-          style={{
-            top: '280px',
-            left: '213px',
-            gap: '14px'
-          }}
-        >
-          {/* Welcome Text */}
-          <p
-            className="text-white"
-            style={{
-              fontFamily: 'Montserrat, sans-serif',
-              fontWeight: 400,
-              fontSize: '50px',
-              lineHeight: '1',
-              letterSpacing: '0',
-              margin: 0,
-              padding: 0
-            }}
-          >
-            WELCOME TO
+      {/* Content Container */}
+      <div
+        className="
+          relative z-10 flex min-h-svh flex-col items-center justify-center text-center
+          px-4 sm:px-6
+          pt-20 /* Navbar Offset */
+        "
+      >
+        <div className="space-y-6 max-w-4xl">
+          {/* Top tagline */}
+          <p className="text-white text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.4em] uppercase montserrat drop-shadow-md">
+            A New Standard of Heritage
           </p>
 
-          {/* Main Heading - LUXURY */}
-          <h1
-            className="text-white"
-            style={{
-              fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
-              fontWeight: 700,
-              fontSize: '154px',
-              lineHeight: '1',
-              letterSpacing: '10.78px',
-              margin: 0,
-              padding: 0
-            }}
-          >
-            LUXURY
-          </h1>
+          {/* Brand Identity */}
+          <div className="flex flex-col items-center">
+            <h1 className="text-white text-[3.2rem] sm:text-6xl md:text-8xl lg:text-9xl font-bold playfair-display leading-none drop-shadow-2xl">
+              ZIVARA
+            </h1>
 
-          {/* HOTELS */}
-          <h1
-            className="text-white"
-            style={{
-              fontFamily: "'EB Garamond', 'Adobe Garamond Pro', 'Garamond', 'Georgia', serif",
-              fontWeight: 700,
-              fontSize: '60px',
-              lineHeight: '1',
-              letterSpacing: '24px',
-              margin: 0,
-              padding: 0
-            }}
-          >
-            HOTELS
-          </h1>
+            <div className="h-px w-16 sm:w-24 md:w-32 bg-white/40 my-6" />
 
-          {/* Subtitle */}
-          <p
-            className="text-white"
-            style={{
-              fontFamily: 'Montserrat, sans-serif',
-              fontWeight: 400,
-              fontSize: '25px',
-              lineHeight: '1.2',
-              letterSpacing: '2.5px',
-              width: '575px',
-              margin: 0,
-              padding: 0
-            }}
-          >
-            Book your stay and enjoy Luxury redefined at the most affordable rates.
+            <h2 className="text-white text-lg sm:text-2xl md:text-4xl lg:text-5xl font-light italic playfair-display drop-shadow-xl">
+              Hotels & Resorts
+            </h2>
+          </div>
+
+          {/* Description */}
+          <p className="text-white/90 text-xs sm:text-sm md:text-lg max-w-xl mx-auto montserrat tracking-wide leading-relaxed drop-shadow-sm">
+            Step into a world of curated luxury and timeless elegance.
+            Experience hospitality redefined in our iconic spaces.
           </p>
-        </div>
 
-        {/* CTA Button - Centered above Scroll */}
-        <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2">
-          <Button
-            size="lg"
-            className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
-          >
-            <span className="mr-2">📅</span> BOOK NOW
-          </Button>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-          <button
-            onClick={scrollToNext}
-            className="flex flex-col items-center gap-2 text-white hover:text-[#C4A962] transition-colors duration-300 group"
-            aria-label="Scroll to next section"
-          >
-            <span className="text-sm tracking-widest raleway">Scroll</span>
-            <ChevronDown className="w-6 h-6 animate-bounce" />
-          </button>
+          {/* Finalized CTA */}
+          <div className="pt-6">
+            <button
+              className="
+                group relative px-10 sm:px-12 py-3 sm:py-4
+                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
+                border border-white text-white overflow-hidden
+                transition-all duration-500
+              "
+            >
+              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              <Link to="/rooms"><span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                Book Your Stay
+              </span></Link>
+            </button>
+          </div>
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default HeroSection;
+export default HeroSection

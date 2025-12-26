@@ -89,32 +89,25 @@ const ContactUs = () => {
             </h2>
 
             {/* Subtitle */}
-            <p
-              className="text-white"
-              style={{
-                fontFamily: 'Montserrat, sans-serif',
-                fontWeight: 400,
-                fontSize: '25px',
-                lineHeight: '1.2',
-                letterSpacing: '2.5px',
-                width: '575px',
-                margin: 0,
-                padding: 0
-              }}
-            >
-              We're here to help and answer any question you might have. We look forward to hearing from you.
-            </p>
-          </div>
+            
 
-          {/* CTA Button - Centered above Scroll */}
-          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2">
-            <Button
-              size="lg"
+            {/* CTA Button */}
+            <div className="pt-6">
+            <button
+              className="
+                group relative px-10 sm:px-12 py-3 sm:py-4
+                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
+                border border-white text-white overflow-hidden
+                transition-all duration-500
+              "
               onClick={scrollToNext}
-              className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
             >
-              Contact Us Now
-            </Button>
+              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              <span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                Reach Out
+              </span>
+            </button>
+          </div>
           </div>
 
           {/* Scroll Indicator */}

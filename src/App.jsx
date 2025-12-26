@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { supabase } from './lib/supabase'
+import AuthDialog from './components/AuthDialog'
+import { useAuth } from "./context/AuthContext.jsx";
 
 // Pages
 import ConfirmPage from './pages/ConfirmPage'
@@ -13,43 +14,14 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import ChatWindow from './components/ChatWindow'
 import ChatToggleButton from './components/ChatToggleButton'
+import MyBookings from './pages/MyBookings';
+
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { authOpen, closeAuth } = useAuth();
 
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === "SIGNED_IN" && session?.user) {
-          const user = session.user;
-
-          // Check if profile exists
-          const { data: profile, error } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", user.id)
-            .single();
-
-          if (error && error.code === "PGRST116") {
-            // Priority: metadata username > full_name > email prefix
-            const username =
-              user.user_metadata?.username || 
-              user.user_metadata?.full_name || 
-              user.email.split("@")[0];
-
-            await supabase.from("profiles").insert({
-              id: user.id,
-              email: user.email,
-              username: username,
-            });
-          }
-        }
-      }
-    );
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
+  // THE FIX: The heavy useEffect is gone. 
+  // The database trigger now handles profile creation instantly.
 
   return (
     <BrowserRouter>
@@ -63,7 +35,10 @@ export default function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/confirm" element={<ConfirmPage />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
         </Routes>
+        
+        <AuthDialog open={authOpen} onClose={closeAuth} />
 
         {/* Global Chatbot UI */}
         <ChatWindow isOpen={isChatOpen} />
