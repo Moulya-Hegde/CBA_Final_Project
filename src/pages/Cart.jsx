@@ -41,7 +41,7 @@ const Cart = () => {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-44 md:pt-48 pb-20">
           <div className="text-center py-20">
             <ShoppingCart className="w-24 h-24 mx-auto text-gray-300 mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 playfair-display">
@@ -67,7 +67,7 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-44 md:pt-48 pb-12 sm:pb-16 md:pb-20">
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 playfair-display mb-2">

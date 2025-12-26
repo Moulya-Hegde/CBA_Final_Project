@@ -22,12 +22,13 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
-  // Check if we're on a detail page (like /rooms/2) or cart page
+  // Check if we're on a detail page (like /rooms/2), cart page, or checkout page
   const isDetailPage = () => {
     const detailPagePatterns = [
       /^\/rooms\/\d+$/,  // matches /rooms/1, /rooms/2, etc.
       /^\/facilities\/\d+$/,  // matches /facilities/1, etc.
       /^\/cart$/,  // matches /cart
+      /^\/checkout$/,  // matches /checkout
     ];
     return detailPagePatterns.some(pattern => pattern.test(location.pathname));
   };
