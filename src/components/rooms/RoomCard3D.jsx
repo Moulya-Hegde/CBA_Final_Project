@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Users, Bed, IndianRupee } from 'lucide-react';
+import { Users, Bed, IndianRupee, ArrowRight } from 'lucide-react';
 
 const RoomCard3D = ({ room, onClick }) => {
   const cardRef = useRef(null);
@@ -52,7 +52,7 @@ const RoomCard3D = ({ room, onClick }) => {
       );
 
       card.style.transform = `perspective(1000px) rotateX(${cardTransform.rotateX}deg) rotateY(${cardTransform.rotateY}deg) scale3d(${cardTransform.scale}, ${cardTransform.scale}, ${cardTransform.scale})`;
-      card.style.boxShadow = '0 10px 35px rgba(0, 0, 0, 0.2)';
+      card.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.12)';
 
       image.style.transform = `perspective(1000px) rotateX(${imageTransform.rotateX}deg) rotateY(${imageTransform.rotateY}deg) scale3d(${imageTransform.scale}, ${imageTransform.scale}, ${imageTransform.scale})`;
 
@@ -90,7 +90,6 @@ const RoomCard3D = ({ room, onClick }) => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-
       card.removeEventListener('mouseenter', handleMouseEnter);
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
@@ -100,70 +99,75 @@ const RoomCard3D = ({ room, onClick }) => {
   return (
     <Card
       ref={cardRef}
-      className="w-full max-w-md cursor-pointer overflow-hidden border-2 hover:border-[#C4A962] transition-colors"
+      className="w-full max-w-md cursor-pointer overflow-hidden border border-gray-200 hover:border-black transition-all duration-500 rounded-xl bg-white group/card"
       onClick={() => onClick(room)}
     >
-      <div className="relative overflow-hidden">
+      {/* Flush Image Container */}
+      <div className="relative w-full overflow-hidden aspect-4/3">
         <img
           ref={imageRef}
           src={room.image}
           alt={room.name}
-          className="aspect-4/3 w-full object-cover"
-          width={500}
-          height={375}
+          className="w-full h-full object-cover block"
         />
+        
+        {/* Minimal City Badge */}
+        {room.cityName && (
+          <div className="absolute top-0 left-0 z-10 bg-black/80 backdrop-blur-md text-white px-4 py-2 text-[10px] tracking-[0.2em] uppercase font-bold rounded-br-xl">
+            {room.cityName}
+          </div>
+        )}
+
+        {/* Minimal Status Badge */}
         {room.badge && (
-          <Badge className="absolute top-4 right-4 bg-[#C4A962] hover:bg-[#B39952] text-white">
+          <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm text-black px-3 py-1 text-[9px] tracking-widest uppercase font-bold border border-black/10">
             {room.badge}
-          </Badge>
+          </div>
         )}
       </div>
 
-      <CardContent className="p-6 space-y-4">
-        <h3 className="text-2xl font-bold playfair-display text-gray-900">{room.name}</h3>
+      <CardContent className="p-6 space-y-5">
+        <div className="space-y-1">
+          <h3 className="text-2xl font-bold playfair-display text-gray-900 leading-tight">
+            {room.name}
+          </h3>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-medium">
+             {room.hotelName}
+          </p>
+        </div>
 
-        <p className="text-sm text-gray-600 raleway line-clamp-2">
+        <p className="text-sm text-gray-500 raleway line-clamp-2 leading-relaxed">
           {room.description}
         </p>
 
-        <div className="flex gap-4 text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
+        {/* Specs with subtle icons */}
+        <div className="flex gap-6 text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
+          <div className="flex items-center gap-2">
+            <Users className="w-3.5 h-3.5 text-gray-900" />
             <span>{room.capacity} Guests</span>
           </div>
-          <div className="flex items-center gap-1">
-            <Bed className="w-4 h-4" />
+          <div className="flex items-center gap-2">
+            <Bed className="w-3.5 h-3.5 text-gray-900" />
             <span>{room.beds}</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {room.amenities.slice(0, 3).map((amenity, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
-              {amenity}
-            </Badge>
-          ))}
-          {room.amenities.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{room.amenities.length - 3} more
-            </Badge>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t">
-          <div className="flex items-center gap-1">
-            <IndianRupee className="w-5 h-5 text-[#C4A962]" />
-            <span className="text-2xl font-bold text-[#C4A962] playfair-display">
-              {room.price.toLocaleString('en-IN')}
-            </span>
-            <span className="text-sm text-gray-500">/night</span>
+        <div className="flex items-center justify-between pt-5 border-t border-gray-100">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-tighter text-gray-400">Starting from</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-bold text-gray-900 playfair-display">
+                ₹{room.price.toLocaleString('en-IN')}
+              </span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-widest">/ Night</span>
+            </div>
           </div>
 
           <Button
-            className="bg-[#C4A962] hover:bg-[#B39952] text-white"
-            size="sm"
+            className="rounded-none bg-black hover:bg-gray-800 text-white px-6 h-10 transition-all duration-300 group/btn"
           >
-            View Details
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Details</span>
+            <ArrowRight className="w-3 h-3 ml-2 transition-transform group-hover/btn:translate-x-1" />
           </Button>
         </div>
       </CardContent>

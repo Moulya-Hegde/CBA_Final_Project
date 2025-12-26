@@ -4,6 +4,7 @@ import TestimonialsSection from '../components/home/TestimonialsSection';
 import Footer from '../components/home/Footer';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Facilities = () => {
   const scrollToNext = () => {
@@ -35,32 +36,37 @@ const Facilities = () => {
           <div className="space-y-6">
             {/* Welcome Text */}
             <p className="text-white text-lg md:text-xl font-light tracking-widest raleway">
-              WELCOME TO
+              ZIVARA
             </p>
 
             {/* Main Heading */}
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display">
-              LUXURY
+            <h1 className="text-white text-shadow-lg text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display">
+              FACILITIES
             </h1>
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display -mt-4">
-              HOTELS
-            </h1>
+            
 
             {/* Subtitle */}
-            <p className="text-white text-base md:text-lg max-w-2xl mx-auto mt-6 font-light raleway">
+            <p className="text-white text-shadow-lg text-base md:text-lg max-w-2xl mx-auto mt-6 font-light raleway">
               Book your stay and enjoy Luxury redefined at the most affordable
               rates.
             </p>
 
             {/* CTA Button */}
-            <div className="mt-8">
-              <Button
-                size="lg"
-                className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                <span className="mr-2">📅</span> BOOK NOW
-              </Button>
-            </div>
+            <div className="pt-6">
+            <button
+              className="
+                group relative px-10 sm:px-12 py-3 sm:py-4
+                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
+                border border-white text-white overflow-hidden
+                transition-all duration-500
+              "
+            >
+              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              <Link to="/rooms"><span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                Book Your Stay
+              </span></Link>
+            </button>
+          </div>
           </div>
 
           {/* Scroll Indicator */}

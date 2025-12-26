@@ -47,21 +47,25 @@ const ContactUs = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-white text-base md:text-lg max-w-2xl mx-auto mt-6 font-light raleway">
-              We're here to help and answer any question you might have.
-              We look forward to hearing from you.
-            </p>
+            
 
             {/* CTA Button */}
-            <div className="mt-8">
-              <Button
-                size="lg"
-                onClick={scrollToNext}
-                className="bg-[#C4A962] hover:bg-[#B39952] text-white font-semibold px-8 py-6 text-base tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Contact Us Now
-              </Button>
-            </div>
+            <div className="pt-6">
+            <button
+              className="
+                group relative px-10 sm:px-12 py-3 sm:py-4
+                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
+                border border-white text-white overflow-hidden
+                transition-all duration-500
+              "
+              onClick={scrollToNext}
+            >
+              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              <span className="relative z-10 group-hover:text-black transition-colors duration-500">
+                Reach Out
+              </span>
+            </button>
+          </div>
           </div>
 
           {/* Scroll Indicator */}

@@ -1,254 +1,272 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import Navbar from '../components/home/Navbar';
+import { supabase } from '../lib/supabase';
 import Footer from '../components/home/Footer';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import BookingDialog from '@/components/booking/BookingDialog';
+import { useAuth } from "@/context/AuthContext.jsx";
 import {
-  IndianRupee,
   Users,
   Bed,
   ArrowLeft,
   Check,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Loader2,
+  MapPin,
+  Building2,
+  Book
 } from 'lucide-react';
-import { roomsData } from '../data/roomsData';
 
 const RoomDetail = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const room = location.state?.room || roomsData.find(r => r.id === parseInt(id));
+  const { isAuthenticated, openAuth, user } = useAuth();
+  const [openBooking, setOpenBooking] = useState(false);
+  // 1. Initialize state with location data if available, else fetch from Supabase
+  const [room, setRoom] = useState(location.state?.room || null);
+  const [loading, setLoading] = useState(!location.state?.room);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+
+  useEffect(() => {
+    if (!room) {
+      fetchRoomById();
+    }
+  }, [id]);
+
+  const fetchRoomById = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('room_types')
+        .select(`
+          *,
+          hotels (
+            name,
+            cities (name)
+          )
+        `)
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      // 2. Format the dynamic data to match the UI expectations
+      setRoom({
+        ...data,
+        price: data.base_price,
+        image: data.main_image,
+        gallery: data.gallery || [data.main_image], // Fallback if gallery is empty
+        hotelName: data.hotels?.name,
+        cityName: data.hotels?.cities?.name
+      });
+    } catch (error) {
+      console.error('Error:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <Loader2 className="w-10 h-10 animate-spin text-black mb-4" />
+        <p className="tracking-widest uppercase text-xs">Loading Details...</p>
+      </div>
+    );
+  }
 
   if (!room) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Room not found</h1>
-          <Button onClick={() => navigate('/rooms')}>Back to Rooms</Button>
+        <div className="text-center space-y-4">
+          <h1 className="text-2xl font-bold playfair-display">Room not found</h1>
+          <Button onClick={() => navigate('/rooms')} className="bg-black text-white">Back to Rooms</Button>
         </div>
       </div>
     );
   }
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === room.gallery.length - 1 ? 0 : prev + 1
-    );
-  };
+  const images = room.gallery || [room.image];
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? room.gallery.length - 1 : prev - 1
-    );
-  };
-
-  const handleBookNow = () => {
-    // TODO: Navigate to booking page or open booking modal
-    console.log('Booking room:', room);
+  const nextImage = () => setCurrentImageIndex((p) => (p === images.length - 1 ? 0 : p + 1));
+  const prevImage = () => setCurrentImageIndex((p) => (p === 0 ? images.length - 1 : p - 1));
+  const handleClick = () => {
+    if (!isAuthenticated) {
+      openAuth();
+      return;
+    }
+    setOpenBooking(true);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
-      {/* Back Button */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-        <Button
-          variant="ghost"
+    <div className="min-h-screen bg-white">
+     
+      {/* Header / Back Button */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8">
+        <button
           onClick={() => navigate('/rooms')}
-          className="hover:bg-gray-100"
+          className="flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 hover:text-black transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Rooms
-        </Button>
+          Back to Selection
+        </button>
       </div>
 
-      {/* Room Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Images and Details */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Image Gallery */}
-            <div className="relative">
-              <div className="relative h-96 md:h-[500px] rounded-xl overflow-hidden shadow-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Left Column - Visuals & Content */}
+          <div className="lg:col-span-2 space-y-12">
+            
+            {/* Gallery Section */}
+            <div className="group relative">
+              <div className="relative h-100 md:h-150 overflow-hidden rounded-xl bg-gray-100">
                 <img
-                  src={room.gallery[currentImageIndex]}
-                  alt={`${room.name} - Image ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover"
+                  src={images[currentImageIndex]}
+                  alt={room.name}
+                  className="w-full h-full object-cover transition-transform duration-700"
                 />
-
-                {/* Navigation Arrows */}
-                {room.gallery.length > 1 && (
+                
+                {images.length > 1 && (
                   <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all"
-                      aria-label="Previous image"
-                    >
-                      <ChevronLeft className="w-6 h-6" />
+                    <button onClick={prevImage} className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white text-black p-3 rounded-full transition-all opacity-0 group-hover:opacity-100">
+                      <ChevronLeft className="w-5 h-5" />
                     </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all"
-                      aria-label="Next image"
-                    >
-                      <ChevronRight className="w-6 h-6" />
+                    <button onClick={nextImage} className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white text-black p-3 rounded-full transition-all opacity-0 group-hover:opacity-100">
+                      <ChevronRight className="w-5 h-5" />
                     </button>
                   </>
                 )}
-
-                {/* Image Indicators */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {room.gallery.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        index === currentImageIndex
-                          ? 'bg-white w-8'
-                          : 'bg-white/50 hover:bg-white/75'
-                      }`}
-                      aria-label={`Go to image ${index + 1}`}
-                    />
-                  ))}
-                </div>
               </div>
 
-              {/* Thumbnail Gallery */}
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                {room.gallery.map((image, index) => (
+              {/* Thumbnails */}
+              <div className="flex gap-4 mt-6 overflow-x-auto pb-2 scrollbar-hide">
+                {images.map((img, idx) => (
                   <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`relative h-24 rounded-lg overflow-hidden transition-all ${
-                      index === currentImageIndex
-                        ? 'ring-2 ring-[#C4A962] ring-offset-2'
-                        : 'opacity-60 hover:opacity-100'
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`relative w-24 h-24 shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+                      idx === currentImageIndex ? 'border-black' : 'border-transparent opacity-50'
                     }`}
                   >
-                    <img
-                      src={image}
-                      alt={`${room.name} thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={img} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Room Description */}
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4 playfair-display">About This Room</h2>
-                <p className="text-gray-700 raleway leading-relaxed">
+            {/* Description & Amenities */}
+            <div className="space-y-12 border-t pt-12">
+              <section>
+                <h2 className="text-3xl font-bold playfair-display mb-6">The Space</h2>
+                <p className="text-gray-600 leading-relaxed raleway text-lg">
                   {room.description}
                 </p>
-              </CardContent>
-            </Card>
+              </section>
 
-            {/* Amenities */}
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4 playfair-display">Amenities</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {room.amenities.map((amenity, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Check className="w-5 h-5 text-[#C4A962]" />
-                      <span className="text-gray-700 raleway">{amenity}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <section>
+                  <h3 className="text-sm uppercase tracking-widest font-bold mb-6">Amenities</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {room.amenities?.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 text-gray-600">
+                        <Check className="w-4 h-4 text-green-600" />
+                        <span className="text-sm raleway">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
 
-            {/* Features */}
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4 playfair-display">Room Features</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {room.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Check className="w-5 h-5 text-[#C4A962]" />
-                      <span className="text-gray-700 raleway">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                <section>
+                  <h3 className="text-sm uppercase tracking-widest font-bold mb-6">Features</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {room.features?.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 text-gray-600">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black" />
+                        <span className="text-sm raleway">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </div>
           </div>
 
-          {/* Right Column - Booking Card */}
+          {/* Right Column - Sticky Booking Card */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24 border-2 border-[#C4A962]/20">
-              <CardContent className="p-6 space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-3xl font-bold playfair-display">{room.name}</h1>
-                    {room.badge && (
-                      <Badge className="bg-[#C4A962] hover:bg-[#B39952] text-white">
-                        {room.badge}
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-4 text-gray-600 mt-4">
-                    <div className="flex items-center gap-1">
-                      <Users className="w-5 h-5" />
-                      <span className="raleway">{room.capacity} Guests</span>
+            <div className="sticky top-32 space-y-6">
+              <Card className="border-none shadow-2xl rounded-2xl overflow-hidden">
+                <CardContent className="p-8 space-y-8">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+                      <MapPin className="w-3 h-3" />
+                      {room.cityName}
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Bed className="w-5 h-5" />
-                      <span className="raleway">{room.beds}</span>
+                    <h1 className="text-4xl font-bold playfair-display leading-tight">{room.name}</h1>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <Building2 className="w-3.5 h-3.5" />
+                      {room.hotelName}
                     </div>
                   </div>
-                </div>
 
-                <div className="border-t border-b py-6">
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <IndianRupee className="w-6 h-6 text-[#C4A962]" />
-                    <span className="text-4xl font-bold text-[#C4A962] playfair-display">
-                      {room.price.toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-gray-500 raleway">/night</span>
+                  <div className="flex items-center gap-6 py-4 border-y border-gray-50">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4" />
+                      <span className="text-xs font-bold uppercase tracking-tighter">{room.capacity} Guests</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Bed className="w-4 h-4" />
+                      <span className="text-xs font-bold uppercase tracking-tighter">{room.beds}</span>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-500 raleway">
-                    Taxes and fees included
-                  </p>
-                </div>
 
-                <div className="space-y-3">
-                  <Button
-                    onClick={handleBookNow}
-                    className="w-full bg-[#C4A962] hover:bg-[#B39952] text-white py-6 text-lg font-semibold"
-                    size="lg"
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase tracking-widest text-gray-400">Nightly Rate</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold playfair-display italic">₹{room.price?.toLocaleString('en-IN')}</span>
+                      <span className="text-xs text-gray-400 font-medium">/ night</span>
+                    </div>
+                  </div>
+
+                  <Button 
+                    className="w-full bg-black hover:bg-gray-800 text-white py-8 rounded-none text-xs uppercase tracking-[0.3em] font-bold transition-all" onClick={handleClick}
                   >
                     Book Now
                   </Button>
 
-                  <p className="text-center text-sm text-gray-500 raleway">
-                    Free cancellation up to 24 hours before check-in
-                  </p>
-                </div>
-
-                <div className="space-y-2 pt-4 border-t">
-                  <h3 className="font-semibold text-gray-900 raleway">Quick Info</h3>
-                  <div className="space-y-1 text-sm text-gray-600 raleway">
-                    <p>✓ Instant confirmation</p>
-                    <p>✓ Best price guarantee</p>
-                    <p>✓ Secure payment</p>
-                    <p>✓ 24/7 customer support</p>
+                  <div className="space-y-3 pt-4 text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+                    <p className="flex justify-between border-b pb-2"><span>Check-in</span> <span>14:00 PM</span></p>
+                    <p className="flex justify-between border-b pb-2"><span>Check-out</span> <span>11:00 AM</span></p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+              
+              <p className="text-center text-[10px] uppercase tracking-widest text-gray-400 px-6 leading-relaxed">
+                Free cancellation up to 48 hours before check-in. Professional room service included.
+              </p>
+            </div>
           </div>
+
         </div>
       </div>
+      <BookingDialog
+  open={openBooking}
+  onClose={(success) => {
+    setOpenBooking(false);
+
+    if (success) {
+      // optional: show toast / navigate / refresh
+      console.log("Booking successful");
+    }
+  }}
+  roomTypeId={room.id}
+  userId={supabase.auth.getUser()?.data?.user?.id}
+/>
+
 
       <Footer />
     </div>
