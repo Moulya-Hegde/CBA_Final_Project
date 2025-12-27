@@ -32,62 +32,58 @@ const Facilities = () => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 h-full">
-          <div
-            className="absolute flex flex-col"
-            style={{
-              top: '280px',
-              left: '213px',
-              gap: '14px'
-            }}
-          >
-            {/* Welcome Text */}
-            <p className="text-white text-lg md:text-xl font-light tracking-widest raleway">
-              ZIVARA
-            </p>
+        <div className="relative z-10 h-full w-full flex items-center justify-center md:justify-start">
+  {/* Content Wrapper */}
+  <div
+    className="flex flex-col px-6 md:px-0 md:ml-[10%] lg:ml-[15%] gap-4 md:gap-6"
+  >
+    {/* Welcome Text */}
+    <p className="text-white text-sm md:text-xl font-light tracking-[0.3em] uppercase raleway">
+      ZIVARA
+    </p>
 
-            {/* Main Heading */}
-            <h1 className="text-white text-shadow-lg text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight playfair-display">
-              FACILITIES
-            </h1>
-            
+    {/* Main Heading */}
+    <h1 className="text-white text-shadow-lg text-5xl md:text-7xl lg:text-9xl font-bold tracking-tight playfair-display leading-tight">
+      FACILITIES
+    </h1>
 
-            {/* Subtitle */}
-            <p className="text-white text-shadow-lg text-base md:text-lg max-w-2xl mx-auto mt-6 font-light raleway">
-              Book your stay and enjoy Luxury redefined at the most affordable
-              rates.
-            </p>
+    {/* Subtitle */}
+    <p className="text-white text-shadow-lg text-sm md:text-lg max-w-md md:max-w-2xl font-light raleway leading-relaxed">
+      Book your stay and enjoy Luxury redefined at the most affordable rates.
+    </p>
 
-            {/* CTA Button */}
-            <div className="pt-6">
-            <button
-              className="
-                group relative px-10 sm:px-12 py-3 sm:py-4
-                text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em]
-                border border-white text-white overflow-hidden
-                transition-all duration-500
-              "
-            >
-              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              <Link to="/rooms"><span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                Book Your Stay
-              </span></Link>
-            </button>
-          </div>
-          </div>
+    {/* CTA Button */}
+    <div className="pt-4 md:pt-6">
+      <Link to="/rooms" className="inline-block">
+        <button
+          className="
+            group relative px-8 md:px-12 py-3 md:py-4
+            text-[10px] md:text-xs font-bold uppercase tracking-[0.3em]
+            border border-white text-white overflow-hidden
+            transition-all duration-500
+          "
+        >
+          <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+          <span className="relative z-10 group-hover:text-black transition-colors duration-500">
+            Book Your Stay
+          </span>
+        </button>
+      </Link>
+    </div>
+  </div>
 
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-            <button
-              onClick={scrollToNext}
-              className="flex flex-col items-center gap-2 text-white hover:text-[#C4A962] transition-colors duration-300 group"
-              aria-label="Scroll to next section"
-            >
-              <span className="text-sm tracking-widest raleway">Scroll</span>
-              <ChevronDown className="w-6 h-6 animate-bounce" />
-            </button>
-          </div>
-        </div>
+  {/* Scroll Indicator */}
+  <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2">
+    <button
+      onClick={scrollToNext}
+      className="flex flex-col items-center gap-2 text-white hover:text-[#C4A962] transition-colors duration-300 group"
+      aria-label="Scroll to next section"
+    >
+      <span className="text-[10px] md:text-sm tracking-widest uppercase raleway">Scroll</span>
+      <ChevronDown className="w-5 h-5 md:w-6 md:h-6 animate-bounce" />
+    </button>
+  </div>
+</div>
       </section>
 
       <FacilitiesShowcase />

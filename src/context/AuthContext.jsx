@@ -7,11 +7,25 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authOpen, setAuthOpen] = useState(false);
-
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     // 1. Define a function to sync user state and stop loading
-    const setData = (session) => {
-      setUser(session?.user ?? null);
+    const setData = async (session) => {
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+    
+      if (currentUser) {
+        // Fetch the boolean from your profiles table
+        const { data } = await supabase
+          .from('profiles') 
+          .select('is_admin')
+          .eq('id', currentUser.id)
+          .single();
+        
+        setIsAdmin(data?.is_admin || false);
+      } else {
+        setIsAdmin(false);
+      }
       setLoading(false);
     };
 
@@ -67,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         isAuthenticated: !!user,
+        isAdmin,
         authOpen,
         openAuth,
         closeAuth,

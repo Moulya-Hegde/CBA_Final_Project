@@ -15,7 +15,9 @@ import Checkout from './pages/Checkout'
 import ChatWindow from './components/ChatWindow'
 import ChatToggleButton from './components/ChatToggleButton'
 import MyBookings from './pages/MyBookings';
-
+import AdminRoute from './pages/admin/AdminRoute';
+import Dashboard from './pages/admin/Dashboard';
+import Analytics from './pages/admin/Analytics';
 export default function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const { authOpen, closeAuth } = useAuth();
@@ -36,6 +38,11 @@ export default function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/confirm" element={<ConfirmPage />} />
           <Route path="/my-bookings" element={<MyBookings />} />
+        </Routes>
+
+        <Routes element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/analytics" element={<Analytics />} />
         </Routes>
         
         <AuthDialog open={authOpen} onClose={closeAuth} />

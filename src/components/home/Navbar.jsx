@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { user, logout, authOpen, openAuth, closeAuth, loading } = useAuth();
+  const { user, logout, authOpen, openAuth, closeAuth, loading,isAdmin } = useAuth();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -72,7 +72,25 @@ const Navbar = () => {
                 Loading...
               </span>
             ) : user ? (
+              
               <div className="flex items-center gap-6 border-l border-gray-700 pl-6">
+                {/* Desktop View: Insert before My Bookings link */}
+{isAdmin && (
+  <>
+    <Link
+      to="/admin/dashboard"
+      className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[#C4A962] transition-all"
+    >
+      Dashboard
+    </Link>
+    <Link
+      to="/admin/analytics"
+      className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[#C4A962] transition-all"
+    >
+      Analytics
+    </Link>
+  </>
+)}
                 {/* My Bookings Link */}
                 <Link
                   to="/my-bookings"
@@ -138,10 +156,32 @@ const Navbar = () => {
           className={`fixed top-0 right-0 h-screen w-[80%] max-w-[320px] bg-[#0f1115] shadow-[-10px_0_30px_rgba(0,0,0,0.5)] z-50 flex flex-col p-8 transition-transform duration-500 ease-in-out md:hidden ${
             menuOpen ? "translate-x-0" : "translate-x-full"
           }`}
-        >
+        >{/* Mobile View: Insert above the "Navigation" paragraph (around line 128) */}
+        {isAdmin && (
+          <div className="flex flex-col gap-4 mb-4">
+            <p className="text-[10px] tracking-[0.5em] text-[#C4A962] uppercase font-bold border-b border-gray-800 pb-2">
+              Management
+            </p>
+            <Link
+              to="/admin/dashboard"
+              onClick={() => setMenuOpen(false)}
+              className="text-lg font-bold tracking-[0.2em] uppercase text-gray-400 hover:text-white"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/admin/analytics"
+              onClick={() => setMenuOpen(false)}
+              className="text-lg font-bold tracking-[0.2em] uppercase text-gray-400 hover:text-white"
+            >
+              Analytics
+            </Link>
+          </div>
+        )}
           <div className="mt-20 flex flex-col gap-8">
             {user && (
                <div className="flex items-center gap-4 border-b border-gray-800 pb-6 mb-2">
+                
                  <img src={userAvatar} className="w-12 h-12 rounded-full border border-gray-700" alt="" />
                  <div>
                    <p className="text-white text-sm font-bold truncate w-40">{user.email}</p>
