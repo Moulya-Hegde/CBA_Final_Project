@@ -1,12 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Box, Typography, TextField, IconButton, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { GoogleGenAI } from "@google/genai";
+import { ChatGroq } from "@langchain/groq";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import ChatMessage from "./ChatMessage";
-
-// Initialize the AI client
-// Note: In a production app, use import.meta.env.VITE_GEMINI_KEY
-const ai = new GoogleGenAI({apiKey:import.meta.env.VITE_GEMINI_API_KEY});
 
 export default function ChatWindow({ isOpen }) {
   const [input, setInput] = useState("");
@@ -16,7 +14,6 @@ export default function ChatWindow({ isOpen }) {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
 
-  // Auto-scroll to latest message
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -33,20 +30,66 @@ export default function ChatWindow({ isOpen }) {
     setLoading(true);
 
     try {
-      // Using the Gemini 2.5 Flash model with the config format from your docs
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: userMessage,
-        config: {
-          systemInstruction: "You are a helpful and polite hotel assistant for LuxeStay. Your name is Neko. You assist guests with check-in info (2 PM), check-out (11 AM), and room types (Single, Double, Suite).",
-          temperature: 1.0, // Default recommended for Gemini 3 models
-        },
+      const llm = new ChatGroq({
+        temperature: 0.7,
+        apiKey: import.meta.env.VITE_GROQ_API_KEY,
+        model: import.meta.env.VITE_GROQ_MODEL,
       });
 
-      setMessages((prev) => [...prev, { role: "bot", text: response.text }]);
+      const promptTemplate = ChatPromptTemplate.fromMessages([
+        ["system", `You are Neko, a helpful and polite hotel assistant for Zivara Hotels & Resorts.
+
+About Zivara Hotels & Resorts:
+Zivara is a luxury heritage brand with multiple properties across India including Mumbai (Zivara Marine Drive), Udaipur (Zivara Lake Palace), and Bangalore (Zivara Tech Park). We offer curated luxury, premium hospitality, and elegant stays.
+
+Hotel Information:
+Check-in: 2 PM (14:00). Early check-in on request.
+Check-out: 11 AM. Late check-out available for additional fee.
+Room categories include Single Rooms (1 king bed), Double Rooms, Executive Suites, Royal Heritage Suites, and Deluxe Suites.
+Room service available 24/7.
+Amenities include a Fitness Center (6 AM to 10 PM), Spa, Poolside Bar, and Swimming Pool.
+WiFi is free across the property (network name: Zivara-Guest).
+Breakfast served 7 AM to 10 AM.
+Parking available with valet and self-parking options.
+
+Website Navigation Assistance (for user guidance):
+Home Page: Introduction to Zivara with booking button and brand story.
+Facilities Page: Showcases The Gym, Poolside Bar, and The Spa with visuals.
+Rooms Page: Shows available rooms by city with location tags, pricing from ₹5147/night, details button for descriptions.
+Contact Page: Contains Office Hours, Address (Dayananda Sagar DSATM), Phone (+44 345 678 903 / +1 234 567 890), and Email (luxury.hotels@gmail.com).
+Dashboard (User Logged In): Displays total properties, clients, bookings, revenue, and recent activity.
+Analytics: Shows Executive Insights including weekly bookings, revenue stats, and charts.
+My Bookings: Access your stays and booking history.
+
+If the user asks:
+How to check rooms? → Guide them to Rooms tab and selecting a city card.
+Where to see bookings? → My Bookings tab in the top navigation bar.
+How to check property performance? → Analytics → Executive Insights tab.
+How to contact the hotel? → Contact page with phone, email, address.
+How to return to home from anywhere? → Click Zivara logo top left or Home tab.
+
+Response Guidelines:
+Write in a friendly conversational tone with 2-4 short sentences.
+Avoid markdown and bullet points (no *, **, #).
+Be warm, professional, and occasionally add subtle cat-style mannerisms (purr-fect, whiskers, paws) when appropriate.
+If unsure, politely say so and offer alternatives.
+Keep answers crisp, natural, and helpful — like chatting with a friend.`],
+        ["human", "{question}"]
+      ]);
+
+      const chain = promptTemplate.pipe(llm).pipe(new StringOutputParser());
+
+      const response = await chain.invoke({
+        question: userMessage
+      });
+
+      setMessages((prev) => [...prev, { role: "bot", text: response }]);
     } catch (error) {
-      console.error("Gemini Error:", error);
-      setMessages((prev) => [...prev, { role: "bot", text: "Sorry, my whiskers are tingling. I encountered an error. Please try again." }]);
+      console.error("Error:", error);
+      setMessages((prev) => [...prev, { 
+        role: "bot", 
+        text: "Sorry, my whiskers are tingling. I encountered an error. Please try again." 
+      }]);
     } finally {
       setLoading(false);
     }
@@ -63,10 +106,11 @@ export default function ChatWindow({ isOpen }) {
         <Typography variant="h6" sx={{ fontFamily: 'Raleway', fontWeight: 700 }}>
           LuxeStay Assistant
         </Typography>
-        <Typography variant="caption" sx={{ opacity: 0.8 }}>Powered by Gemini 2.5 Flash</Typography>
+        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+          Powered by Groq
+        </Typography>
       </Box>
 
-      {/* Messages Area */}
       <Box
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col"
@@ -81,7 +125,6 @@ export default function ChatWindow({ isOpen }) {
         )}
       </Box>
 
-      {/* Input Area */}
       <Box component="form" onSubmit={handleSend} className="p-4 bg-white border-t flex items-center gap-2">
         <TextField
           fullWidth
@@ -102,7 +145,12 @@ export default function ChatWindow({ isOpen }) {
           color="primary" 
           onClick={handleSend} 
           disabled={loading}
-          sx={{ backgroundColor: '#2563eb', color: 'white', '&:hover': { backgroundColor: '#1d4ed8' } }}
+          sx={{ 
+            backgroundColor: '#2563eb', 
+            color: 'white', 
+            '&:hover': { backgroundColor: '#1d4ed8' },
+            '&:disabled': { backgroundColor: '#9ca3af' }
+          }}
         >
           <SendIcon fontSize="small" />
         </IconButton>
