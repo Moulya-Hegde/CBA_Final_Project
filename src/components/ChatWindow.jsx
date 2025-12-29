@@ -97,7 +97,7 @@ Keep answers crisp, natural, and helpful — like chatting with a friend.`,
       {/* Header */}
       <Box className="bg-blue-600 p-4 text-white">
         <Typography variant="h6" sx={{ fontFamily: 'Raleway', fontWeight: 700 }}>
-          LuxeStay Assistant
+          AI assistant
         </Typography>
         <Typography variant="caption" sx={{ opacity: 0.8 }}>Powered by Gemini 2.5 Flash</Typography>
       </Box>
